@@ -10,6 +10,7 @@ import { removeFile } from './src/modules/removeFile.js';
 import { fileHash } from './src/modules/hash.js';
 import { renameFile } from './src/modules/renameFile.js';
 import { copyFile } from './src/modules/copyFile.js';
+import { compress, decompress } from './src/modules/compress.js';
 
 const doExit = (userName) => {
   console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
@@ -30,14 +31,6 @@ const getUserName = () => {
     
     return null;
 }
-
-// const execCommand = async (command) => {
-//     switch(command) {
-//         case '.exit':
-//             doExit(userName);
-//             break;
-//     }
-// }
 
 const init = async () => {
   const userName = getUserName();
@@ -79,11 +72,11 @@ const init = async () => {
             const isDestDirExist = await checkExist(destDir);
 
             if(isDestDirExist) {
-            homeDir = destDir;
-            showDir(homeDir);
+                homeDir = destDir;
+                showDir(homeDir);
             }
             else {
-            const isDestAbsDirExist = await checkExist(arrCdCmd[1]);
+                const isDestAbsDirExist = await checkExist(arrCdCmd[1]);
             if(isDestAbsDirExist){
                 homeDir = arrCdCmd[1];
                 showDir(homeDir);
@@ -101,11 +94,11 @@ const init = async () => {
             let destFile = `${homeDir}${sep}${arrCatCmd[1]}`;
             const isDestFileExist = await checkExist(destFile);
             if(isDestFileExist) {
-            const fileData = await readFile(destFile);
-            fileData === null ? console.log('Error read file') : console.log(fileData);
+                const fileData = await readFile(destFile);
+                fileData === null ? console.log('Error read file') : console.log(fileData);
             }
             else {
-            console.log(`File not found`);
+                console.log(`File not found`);
             }
         }
         else if(answer.trim().startsWith('add ')) {
@@ -116,58 +109,78 @@ const init = async () => {
             const arrRmCmd = answer.trim().split(' ');
             const isDestFileExist = await checkExist(`${homeDir}${sep}${arrRmCmd[1]}`);
             if(isDestFileExist) {
-            const rmResult = await removeFile(`${homeDir}${sep}${arrRmCmd[1]}`, ''); 
+                const rmResult = await removeFile(`${homeDir}${sep}${arrRmCmd[1]}`, ''); 
             if(rmResult === null) {
                 console.log('Error delete file!');
             }
             }
             else {
-            console.log(`File not found`);
+                console.log(`File not found`);
             }
         }
         else if(answer.trim().startsWith('hash ')) {
             const arrHashCmd = answer.trim().split(' ');
             const isDestFileExist = await checkExist(`${homeDir}${sep}${arrHashCmd[1]}`);
             if(isDestFileExist) {
-            const hash = await fileHash(`${homeDir}${sep}${arrHashCmd[1]}`, ''); 
-            console.log(hash);
+                const hash = await fileHash(`${homeDir}${sep}${arrHashCmd[1]}`, ''); 
+                console.log(hash);
             }
             else {
-            console.log(`File not found`);
+                console.log(`File not found`);
             }
         }
         else if(answer.trim().startsWith('rn ')) {
             const arrRnCmd = answer.trim().split(' ');
             const isSourceFileExist = await checkExist(`${homeDir}${sep}${arrRnCmd[1]}`);
             if(isSourceFileExist) {
-            const rmResult = await renameFile(`${homeDir}${sep}${arrRnCmd[1]}`, `${homeDir}${sep}${arrRnCmd[2]}`); 
+                const rmResult = await renameFile(`${homeDir}${sep}${arrRnCmd[1]}`, `${homeDir}${sep}${arrRnCmd[2]}`); 
             if(rmResult === null) {
                 console.log('Error rename file!');
             }
             }
             else {
-            console.log(`File not found`);
+                console.log(`File not found`);
             }
         }
         else if(answer.trim().startsWith('cp ')) {
             const arrCpCmd = answer.trim().split(' ');
             const isSourceFileExist = await checkExist(`${homeDir}${sep}${arrCpCmd[1]}`);
             if(isSourceFileExist) {
-            copyFile(`${homeDir}${sep}${arrCpCmd[1]}`, arrCpCmd[2]); 
+                copyFile(`${homeDir}${sep}${arrCpCmd[1]}`, arrCpCmd[2]); 
             }
             else {
-            console.log(`File not found`);
+                console.log(`File not found`);
             }
         }
         else if(answer.trim().startsWith('mv ')) {
             const arrCpCmd = answer.trim().split(' ');
             const isSourceFileExist = await checkExist(`${homeDir}${sep}${arrCpCmd[1]}`);
             if(isSourceFileExist) {
-            copyFile(`${homeDir}${sep}${arrCpCmd[1]}`, arrCpCmd[2]); 
-            await removeFile(`${homeDir}${sep}${arrCpCmd[1]}`, ''); 
+                copyFile(`${homeDir}${sep}${arrCpCmd[1]}`, arrCpCmd[2]); 
+                await removeFile(`${homeDir}${sep}${arrCpCmd[1]}`, ''); 
             }
             else {
-            console.log(`File not found`);
+                console.log(`File not found`);
+            }
+        }
+        else if(answer.trim().startsWith('compress ')) {
+            const arrCompressCmd = answer.trim().split(' ');
+            const isDestFileExist = await checkExist(`${homeDir}${sep}${arrCompressCmd[1]}`);
+            if(isDestFileExist) {
+                await compress(`${homeDir}${sep}${arrCompressCmd[1]}`, `${homeDir}${sep}${arrCompressCmd[2]}`);             
+            }
+            else {
+                console.log(`File not found`);
+            }
+        }
+        else if(answer.trim().startsWith('decompress ')) {
+            const arrDecompressCmd = answer.trim().split(' ');
+            const isDestFileExist = await checkExist(`${homeDir}${sep}${arrDecompressCmd[1]}`);
+            if(isDestFileExist) {
+                await decompress(`${homeDir}${sep}${arrDecompressCmd[1]}`, `${homeDir}${sep}${arrDecompressCmd[2]}`);             
+            }
+            else {
+                console.log(`File not found`);
             }
         }
         else {
