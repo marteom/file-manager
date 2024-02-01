@@ -1,9 +1,7 @@
-
 import * as readlinePromises from 'node:readline/promises';
-import { homedir } from 'os';
 import process, { stdin, stdout } from 'node:process';
 import { writeFile } from 'fs/promises';
-import { checkExist, getSep } from './src/utils/helper.js';
+import { checkExist, getSep, showDir, doExit, getUserName } from './src/utils/helper.js';
 import { showFoldersFiles } from './src/modules/folderFile.js';
 import { readFile } from './src/modules/readFile.js';
 import { removeFile } from './src/modules/removeFile.js';
@@ -11,27 +9,7 @@ import { fileHash } from './src/modules/hash.js';
 import { renameFile } from './src/modules/renameFile.js';
 import { copyFile } from './src/modules/copyFile.js';
 import { compress, decompress } from './src/modules/compress.js';
-import { osInfo } from './src/modules/osInfo.js';
-
-const doExit = (userName) => {
-  console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
-  process.exit(0);
-}
-
-const showDir = (dirName) => {
-  console.log(`You are currently in ${dirName}`);
-}
-
-const getUserName = () => {
-    const args = process.argv;
-    for(let i=0; i<args.length; i++) {
-        if (args[i].indexOf('--username') === 0){
-          return args[i].split('=')[1];
-        }
-    }
-    
-    return null;
-}
+import { osInfo, sysHomeDir } from './src/modules/osInfo.js';
 
 const init = async () => {
   const userName = getUserName();
@@ -44,7 +22,7 @@ const init = async () => {
    console.log(`Welcome to the File Manager, ${userName}!`);
 
    const sep = getSep();
-   let homeDir = homedir();
+   let homeDir = sysHomeDir();
 
    showDir(homeDir);
 
@@ -55,6 +33,7 @@ const init = async () => {
 
     rl.on('SIGINT', () => {
         doExit(userName);
+        process.exit(0);
     });
 
    try {
@@ -62,6 +41,7 @@ const init = async () => {
         const answer = await rl.question("");
         if(answer.trim().startsWith('.exit')){
             doExit(userName);
+            process.exit(0);
         }
         else if(answer.trim().startsWith('up')){
             homeDir = homeDir.includes(sep) ? homeDir.substring(0, homeDir.lastIndexOf(sep)) : homeDir;

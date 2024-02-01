@@ -27,3 +27,22 @@ export const getSep = () => {
   
     return sep;
   }
+
+  export const showDir = (dirName) => {
+    console.log(`You are currently in ${dirName}`);
+  }
+
+  export const doExit = (userName) => {
+    console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
+  }
+
+  export const getUserName = () => {
+    const args = process.argv;
+    for(let i=0; i<args.length; i++) {
+        if (args[i].indexOf('--username') === 0){
+          return args[i].split('=')[1];
+        }
+    }
+    
+    return null;
+}

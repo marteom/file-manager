@@ -22,3 +22,7 @@ export const osInfo = (command) => {
         console.log('option not recognized');
     }    
 };
+
+export const sysHomeDir = () => {
+    return homedir();
+}
