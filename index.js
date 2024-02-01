@@ -11,6 +11,7 @@ import { fileHash } from './src/modules/hash.js';
 import { renameFile } from './src/modules/renameFile.js';
 import { copyFile } from './src/modules/copyFile.js';
 import { compress, decompress } from './src/modules/compress.js';
+import { osInfo } from './src/modules/osInfo.js';
 
 const doExit = (userName) => {
   console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
@@ -182,6 +183,10 @@ const init = async () => {
             else {
                 console.log(`File not found`);
             }
+        }
+        else if(answer.trim().startsWith('os ')) {
+            const arrCpCmd = answer.trim().split(' ');
+            osInfo(arrCpCmd[1]);
         }
         else {
             console.log(`Invalid input`);
