@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "start:user": "node index.js -- --username=tester",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
