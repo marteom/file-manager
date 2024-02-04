@@ -2,8 +2,11 @@
   "name": "file-manager",
   "version": "1.0.0",
   "description": "File Manager using Node.js APIs",
-  "main": ".src/index.js",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "node index.js",
+    "start:user": "node index.js -- --username=tester",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
